@@ -1,15 +1,20 @@
 package tests;
 
 import io.restassured.RestAssured;
+import model.User;
+import model.UserRequest;
+import model.UserResponse;
+import model.UsersResponse;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReqresInTests {
-
 
     @BeforeEach
     void beforeEach() {
@@ -19,85 +24,54 @@ public class ReqresInTests {
     @Test
     @DisplayName("SINGLE USER")
     void singleUserTest() {
-        given()
+        UserResponse userResponse = given()
                 .when()
                 .get("/users/2")
                 .then()
                 .statusCode(200)
-                .log()
+                .extract()
                 .body()
-                .body("data.first_name:", is("Janet"))
-                .body("support.url", is("https://reqres.in/#support-heading"));
+                .as(UserResponse.class);
+
+        assertTrue(userResponse.getData().getId() == 2);
 
     }
 
-        @Test
-        @DisplayName("CREATE USER")
-        void createUserTest() {
-            given()
-                    .when()
-                    .post("/users")
-                    .then()
-                    .statusCode(201)
-                    .log()
-                    .body()
-                    .body("data.email", is("george.bluth@reqres.in"))
-                    .body("data.avatar", is("https://reqres.in/img/faces/1-image.jpg"));
+    @Test
+    @DisplayName("LIST USERS")
+    void listUsersTest() {
+        UsersResponse usersResponse = given()
+                .when()
+                .get("/users")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(UsersResponse.class);
+
+        assertTrue(usersResponse.getPage() == 5);
 
     }
 
-        @Test
-        @DisplayName("UPDATE")
-        void updateTest() {
-            given()
-                    .when()
-                    .put("/users/2")
-                    .then()
-                    .statusCode(200)
-                    .log()
-                    .body()
-                    .body("data.name", is("morpheus"))
-                    .body("data.job", is("zion resident"));
+    @Test
+    @DisplayName("CREATE USER")
+    void createUserTest() {
 
-    }
+        UserRequest newUser = new UserRequest();
+        newUser.setEmail("test@test.test");
+        newUser.setPassword("password");
 
-        @Test
-        @DisplayName("SUCCESSFUL LOGIN")
-        void successfulLoginTest() {
-            given()
-                    .when()
-                    .post("/api/login")
-                    .then()
-                    .statusCode(200)
-                    .log()
-                    .body()
-                    .body("data.name", is("morpheus"))
-                    .body("data.job", is("zion resident"));
+        User user = given()
+                .when()
+                .body(newUser)
+                .post("/users")
+                .then()
+                .statusCode(201)
+                .extract()
+                .body()
+                .as(User.class);
 
-    }
-
-        @Test
-        @DisplayName("UNSUCCESSFUL REGISTER")
-        void unsuccessfulRegisterTest() {
-            given()
-                    .when()
-                    .post("/api/register")
-                    .then()
-                    .statusCode(400)
-                    .log()
-                    .body()
-                    .body("data.error", is("Missing password"));
-
-    }
-
-        @Test
-        @DisplayName("DELETE USER")
-        void delayedResponseTest() {
-            given()
-                    .when()
-                    .delete("/api/users/2")
-                    .then()
-                    .statusCode(204);
+        assertNotNull(user.getId());
 
     }
 
