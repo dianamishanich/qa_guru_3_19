@@ -22,6 +22,7 @@ public class UsersResponse {
 
     public void setPage(int page) {
         this.page = page;
+
     }
 
     public int getPer_page() {

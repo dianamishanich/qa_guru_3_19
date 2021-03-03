@@ -1,31 +1,23 @@
 package tests;
 
-import io.restassured.RestAssured;
 import model.User;
 import model.UserRequest;
 import model.UserResponse;
 import model.UsersResponse;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import spec.Spec;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReqresInTests {
 
-    @BeforeEach
-    void beforeEach() {
-        RestAssured.baseURI = "https://reqres.in/api";
-    }
-
     @Test
     @DisplayName("SINGLE USER")
     void singleUserTest() {
-        UserResponse userResponse = given()
-                .when()
+        UserResponse userResponse = Spec.request()
                 .get("/users/2")
                 .then()
                 .statusCode(200)
@@ -40,8 +32,7 @@ public class ReqresInTests {
     @Test
     @DisplayName("LIST USERS")
     void listUsersTest() {
-        UsersResponse usersResponse = given()
-                .when()
+        UsersResponse usersResponse = Spec.request()
                 .get("/users")
                 .then()
                 .statusCode(200)
@@ -61,8 +52,7 @@ public class ReqresInTests {
         newUser.setEmail("test@test.test");
         newUser.setPassword("password");
 
-        User user = given()
-                .when()
+        User user = Spec.request()
                 .body(newUser)
                 .post("/users")
                 .then()
