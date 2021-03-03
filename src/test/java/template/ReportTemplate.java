@@ -22,5 +22,4 @@ public class ReportTemplate {
         FILTER.setResponseTemplate("response.ftl");
         return FILTER;
     }
-
 }
