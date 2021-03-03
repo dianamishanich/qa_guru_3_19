@@ -14,7 +14,6 @@ public class Spec {
                 .basePath("/api")
                 .filter(filters().customTemplates())
                 .log().uri();
-
     }
 
 }
