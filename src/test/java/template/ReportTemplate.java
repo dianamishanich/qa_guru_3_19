@@ -7,7 +7,6 @@ public class ReportTemplate {
     private static final AllureRestAssured FILTER = new AllureRestAssured();
 
     private static class InitLogFilter {
-
     private static final ReportTemplate logFilter = new ReportTemplate();
     }
 
@@ -22,4 +21,5 @@ public class ReportTemplate {
         FILTER.setResponseTemplate("response.ftl");
         return FILTER;
     }
+
 }

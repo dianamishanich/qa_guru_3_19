@@ -17,6 +17,7 @@ public class ReqresInTests {
     @Test
     @DisplayName("SINGLE USER")
     void singleUserTest() {
+
         UserResponse userResponse = Spec.request()
                 .get("/users/2")
                 .then()
@@ -32,6 +33,7 @@ public class ReqresInTests {
     @Test
     @DisplayName("LIST USERS")
     void listUsersTest() {
+
         UsersResponse usersResponse = Spec.request()
                 .get("/users")
                 .then()
