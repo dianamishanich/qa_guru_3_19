@@ -15,4 +15,5 @@ public class Spec {
                 .filter(filters().customTemplates())
                 .log().uri();
     }
+
 }
